@@ -292,6 +292,23 @@ button, input { font: inherit; }
 }
 .rotator__word.is-active { transform: translateY(0); }
 
+/* Badge version: sized to its longest phrase, same slide as the hero words. */
+.rotator--badge {
+  display: inline-grid;
+  width: auto;
+  height: 19px;
+}
+.rotator--badge .rotator__word {
+  position: static;
+  grid-area: 1 / 1;
+  text-align: center;
+  font: inherit;
+  line-height: 19px;
+  letter-spacing: inherit;
+  transform: translateY(22px);
+}
+.rotator--badge .rotator__word.is-active { transform: translateY(0); }
+
 .hero__lead {
   display: flex;
   flex-direction: column;

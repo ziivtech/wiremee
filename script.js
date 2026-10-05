@@ -1,16 +1,20 @@
-// "Pay ___ from one wallet." matches the Figma prototype:
+// Rotating words. "Pay ___ from one wallet." matches the Figma prototype:
 // each word holds for 0.8s, then slides in over 0.3s (ease-out).
+// A rotator can set its own cycle length with data-interval (ms).
 (function rotateWords() {
-  const words = document.querySelectorAll(".rotator__word");
-  if (words.length < 2) return;
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-  let index = 0;
-  setInterval(() => {
-    words[index].classList.remove("is-active");
-    index = (index + 1) % words.length;
-    words[index].classList.add("is-active");
-  }, 1100);
+  document.querySelectorAll(".rotator").forEach((rotator) => {
+    const words = rotator.querySelectorAll(".rotator__word");
+    if (words.length < 2) return;
+
+    let index = 0;
+    setInterval(() => {
+      words[index].classList.remove("is-active");
+      index = (index + 1) % words.length;
+      words[index].classList.add("is-active");
+    }, Number(rotator.dataset.interval) || 1100);
+  });
 })();
 
 // Mobile / tablet menu
