@@ -218,7 +218,13 @@ button, input { font: inherit; }
 }
 .waitlist button:hover { filter: brightness(1.05); }
 
-.nav__cta,
+.nav__cta {
+  height: 46px;
+  padding: 12px 24px;
+  border-radius: 100px;
+  transition: filter 0.2s;
+}
+.nav__cta:hover { filter: brightness(1.05); }
 .nav__toggle { display: none; }
 
 /* hero content */
@@ -376,9 +382,10 @@ button, input { font: inherit; }
   60%      { transform: translate(7px, 105px) scale(1.028); animation-timing-function: var(--ease-out); }
   100%     { transform: translate(0, 0) scale(1); }
 }
+/* Shorter drift than the prototype so the card never slides under the frosted band below the hero. */
 @keyframes float-3 {
   0%, 7.14%    { transform: translate(0, 0) scale(1); animation-timing-function: var(--ease-out); }
-  50%, 57.14%  { transform: translate(7px, 97px) scale(1.028); animation-timing-function: var(--ease-out); }
+  50%, 57.14%  { transform: translate(4px, 10px) scale(1.028); animation-timing-function: var(--ease-out); }
   100%         { transform: translate(0, 0) scale(1); }
 }
 
@@ -455,14 +462,34 @@ button, input { font: inherit; }
 
 .beads {
   position: relative;
+  isolation: isolate;
+  overflow: hidden;
   background-color: var(--bg);
-  background-image:
+}
+/* Bead spiral: moves slower than the page on scroll (--parallax, set in script.js) and drifts gently. */
+.beads::before,
+.beads::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+}
+.beads::before {
+  inset: -80px 0;
+  background: url("assets/img/beads-bg.webp") center / cover no-repeat;
+  translate: 0 var(--parallax, 0px);
+  animation: bead-drift 14s ease-in-out infinite alternate;
+  will-change: transform, translate;
+}
+.beads::after {
+  inset: 0;
+  background:
     linear-gradient(180deg, rgba(243, 243, 243, 0) 0%, var(--bg) 100%),
-    linear-gradient(180deg, var(--bg) 0%, rgba(243, 243, 243, 0) 100%),
-    url("assets/img/beads-bg.webp");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+    linear-gradient(180deg, var(--bg) 0%, rgba(243, 243, 243, 0) 100%);
+}
+@keyframes bead-drift {
+  from { transform: scale(1.04) rotate(0deg); }
+  to   { transform: scale(1.09) rotate(1.5deg); }
 }
 
 .glass-card {
@@ -489,25 +516,35 @@ button, input { font: inherit; }
 .toggle {
   display: flex;
   align-items: center;
-  gap: 20px;
   height: 53px;
-  padding: 0 12px 0 5px;
+  padding: 0 5px;
   border-radius: 100px;
   background: #e8e8e8;
 }
-.toggle__active {
+.toggle__btn {
   height: 46px;
   padding: 12px 24px;
+  border: 0;
   border-radius: 100px;
-}
-.toggle__inactive {
+  background: transparent;
   color: var(--ink-800);
   font-weight: 600;
   font-size: 16px;
   line-height: 21.86px;
   letter-spacing: -0.32px;
   white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.2s;
 }
+.toggle__btn:not(.is-active):hover { color: var(--green); }
+.toggle__btn.is-active {
+  background: var(--gradient);
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  cursor: default;
+}
+.toggle__btn:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
 
 .audience__cards {
   display: grid;
@@ -515,7 +552,10 @@ button, input { font: inherit; }
   gap: 24px;
   width: min(1392px, 100%);
 }
+.audience__cards[hidden] { display: none; }
 .audience__cards .glass-card { min-height: 220px; gap: 19px; }
+.audience__cards:not([hidden]) .glass-card { animation: tab-in 0.35s var(--ease-out) both; }
+@keyframes tab-in { from { opacity: 0; transform: translateY(8px); } }
 .audience__cards .glass-card h3 { margin-bottom: -6px; }
 .badge--num { align-self: flex-start; }
 
@@ -675,15 +715,9 @@ button, input { font: inherit; }
 
 /* ---------- responsive ---------- */
 
-@media (max-width: 1199px) {
+@media (max-width: 1023px) {
   .nav__links { display: none; }
-  .waitlist--nav { display: none; }
-  .nav__cta {
-    display: inline-flex;
-    margin-left: auto;
-    padding: 12px 20px;
-    border-radius: 100px;
-  }
+  .nav__cta { margin-left: auto; padding: 12px 20px; }
   .nav__toggle {
     display: inline-flex;
     flex-direction: column;
@@ -722,6 +756,7 @@ button, input { font: inherit; }
   .hero__line1,
   .hero__line2 { font-size: 56px; line-height: 68px; }
   .mockup-wrap { height: 640px; }
+  .float--1 { left: 20px; z-index: 1; }
   .features { margin-top: 0; }
   .feature-grid,
   .audience__cards,
@@ -748,8 +783,12 @@ button, input { font: inherit; }
   .hero__line1 { gap: 6px; }
   .hero__line2 { margin-top: 0; }
 
-  .mockup-wrap { height: 520px; margin-top: 40px; }
-  .mockup { transform: scale(0.72); transform-origin: 50% 0; }
+  .mockup-wrap { height: 450px; margin-top: 40px; }
+  .mockup { transform: scale(0.66); transform-origin: 50% 0; }
+  /* Pull the cards in so they stay on screen at phone widths. */
+  .float--1 { left: 95px; top: 260px; }
+  .float--2,
+  .float--3 { left: 380px; }
 
   .h2 { font-size: 34px; line-height: 40px; }
   .features { padding: 60px 16px 80px; }
@@ -796,7 +835,8 @@ button, input { font: inherit; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .float__card { animation: none; }
+  .float__card,
+  .beads::before { animation: none; }
   .rotator__word { transition: none; }
 }
 
