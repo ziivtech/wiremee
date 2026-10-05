@@ -559,7 +559,33 @@ button, input { font: inherit; }
   width: min(1392px, 100%);
 }
 .audience__cards[hidden] { display: none; }
-.audience__cards--five { grid-template-columns: repeat(5, 1fr); }
+/* Business tab has seven cards: wrap them 4 + 3, centred (like the GenZ section). */
+.audience__cards--wrap { display: flex; flex-wrap: wrap; justify-content: center; }
+.audience__cards--wrap .glass-card { flex: 0 1 calc((100% - 72px) / 4); }
+.card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--ink-600);
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 19.12px;
+  letter-spacing: -0.14px;
+}
+.card-list li { position: relative; padding-left: 16px; }
+.card-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 7px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gradient);
+}
 .audience__cards .glass-card { min-height: 220px; gap: 19px; }
 .audience__cards:not([hidden]) .glass-card { animation: tab-in 0.35s var(--ease-out) both; }
 @keyframes tab-in { from { opacity: 0; transform: translateY(8px); } }
@@ -803,7 +829,8 @@ button, input { font: inherit; }
 }
 
 @media (max-width: 1023px) {
-  .genz__cards .glass-card { flex-basis: calc((100% - 24px) / 2); }
+  .genz__cards .glass-card,
+  .audience__cards--wrap .glass-card { flex-basis: calc((100% - 24px) / 2); }
 }
 
 @media (max-width: 767px) {
@@ -835,7 +862,8 @@ button, input { font: inherit; }
   .easy { padding-left: 16px; padding-right: 16px; min-height: 0; }
   .audience { padding-top: 80px; padding-bottom: 80px; }
   .genz { padding: 80px 16px; }
-  .genz__cards .glass-card { flex-basis: 100%; min-height: 0; }
+  .genz__cards .glass-card,
+  .audience__cards--wrap .glass-card { flex-basis: 100%; min-height: 0; }
   .easy { padding-top: 80px; padding-bottom: 80px; }
 
   .feature-grid,
