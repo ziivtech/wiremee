@@ -25,7 +25,7 @@
     light: { rows: 24, beadR: 0.23,  step: 0.44, segs: [6, 4],   fps: 30 },
   };
   const ROW_TWIST = 0.12;        // rows spiral gently along the tube
-  const ROLL_SPEED = 0.22;       // rad/s each tube rolls around its own axis
+  const ROLL_SPEED = 0.07;       // rad/s each tube rolls around its own axis (kept slow so it stays in the background)
 
   const supportsWebGL = (() => {
     try {

@@ -559,11 +559,38 @@ button, input { font: inherit; }
   width: min(1392px, 100%);
 }
 .audience__cards[hidden] { display: none; }
+.audience__cards--five { grid-template-columns: repeat(5, 1fr); }
 .audience__cards .glass-card { min-height: 220px; gap: 19px; }
 .audience__cards:not([hidden]) .glass-card { animation: tab-in 0.35s var(--ease-out) both; }
 @keyframes tab-in { from { opacity: 0; transform: translateY(8px); } }
 .audience__cards .glass-card h3 { margin-bottom: -6px; }
 .badge--num { align-self: flex-start; }
+
+/* ---------- GENZ ---------- */
+
+.genz {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 60px;
+  padding: 100px 24px;
+}
+
+.genz__cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 24px;
+  width: min(1392px, 100%);
+}
+.genz__cards .glass-card {
+  flex: 0 1 calc((100% - 72px) / 4);
+  min-height: 220px;
+  gap: 19px;
+}
+.genz__cards .glass-card h3 { margin-bottom: -6px; }
 
 /* ---------- HOW IT WORKS ---------- */
 
@@ -775,6 +802,10 @@ button, input { font: inherit; }
   .deco--cta { width: 560px; height: auto; top: 160px; left: -260px; }
 }
 
+@media (max-width: 1023px) {
+  .genz__cards .glass-card { flex-basis: calc((100% - 24px) / 2); }
+}
+
 @media (max-width: 767px) {
   .nav { top: 16px; width: calc(100% - 32px); height: 62px; padding: 8px 8px 8px 4px; }
   .logo img { width: 120px; height: 34px; }
@@ -803,6 +834,8 @@ button, input { font: inherit; }
   .how,
   .easy { padding-left: 16px; padding-right: 16px; min-height: 0; }
   .audience { padding-top: 80px; padding-bottom: 80px; }
+  .genz { padding: 80px 16px; }
+  .genz__cards .glass-card { flex-basis: 100%; min-height: 0; }
   .easy { padding-top: 80px; padding-bottom: 80px; }
 
   .feature-grid,
