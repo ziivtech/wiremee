@@ -466,7 +466,7 @@ button, input { font: inherit; }
   overflow: hidden;
   background-color: var(--bg);
 }
-/* Bead spiral: moves slower than the page on scroll (--parallax, set in script.js) and drifts gently. */
+/* Bead spiral: turns slowly and moves slower than the page on scroll (--parallax, set in script.js). */
 .beads::before,
 .beads::after {
   content: "";
@@ -478,7 +478,7 @@ button, input { font: inherit; }
   inset: -80px 0;
   background: url("assets/img/beads-bg.webp") center / cover no-repeat;
   translate: 0 var(--parallax, 0px);
-  animation: bead-drift 14s ease-in-out infinite alternate;
+  animation: bead-spin 60s linear infinite;
   will-change: transform, translate;
 }
 .beads::after {
@@ -487,9 +487,10 @@ button, input { font: inherit; }
     linear-gradient(180deg, rgba(243, 243, 243, 0) 0%, var(--bg) 100%),
     linear-gradient(180deg, var(--bg) 0%, rgba(243, 243, 243, 0) 100%);
 }
-@keyframes bead-drift {
+/* The image edges are the page colour (#f3f3f3), so a full turn shows no seams. */
+@keyframes bead-spin {
   from { transform: scale(1.04) rotate(0deg); }
-  to   { transform: scale(1.09) rotate(1.5deg); }
+  to   { transform: scale(1.04) rotate(360deg); }
 }
 
 .glass-card {
