@@ -1,4 +1,4 @@
-/* Wiremee landing page — built from Figma frame 193:118 (1440px desktop). */
+/* Wiremee landing page, built from Figma frame 193:118 (1440px desktop). */
 
 :root {
   --green: #02c408;
@@ -466,7 +466,7 @@ button, input { font: inherit; }
   overflow: hidden;
   background-color: var(--bg);
 }
-/* Bead spiral: turns slowly and moves slower than the page on scroll (--parallax, set in script.js). */
+/* Bead spiral still image (fallback); moves slower than the page on scroll (--parallax, set in script.js). */
 .beads::before,
 .beads::after {
   content: "";
@@ -478,19 +478,24 @@ button, input { font: inherit; }
   inset: -80px 0;
   background: url("assets/img/beads-bg.webp") center / cover no-repeat;
   translate: 0 var(--parallax, 0px);
-  animation: bead-spin 60s linear infinite;
-  will-change: transform, translate;
+  transition: opacity 0.6s;
 }
+/* 3D version (beads3d.js) replaces the still image once it has rendered. */
+.beads__canvas {
+  position: absolute;
+  z-index: -1;
+  top: -80px;
+  left: 0;
+  width: 100%;
+  height: calc(100% + 160px);
+  translate: 0 var(--parallax, 0px);
+  pointer-events: none;
+}
+.beads--3d::before { opacity: 0; }
 .beads::after {
   inset: 0;
   background:
-    linear-gradient(180deg, rgba(243, 243, 243, 0) 0%, var(--bg) 100%),
-    linear-gradient(180deg, var(--bg) 0%, rgba(243, 243, 243, 0) 100%);
-}
-/* The image edges are the page colour (#f3f3f3), so a full turn shows no seams. */
-@keyframes bead-spin {
-  from { transform: scale(1.04) rotate(0deg); }
-  to   { transform: scale(1.04) rotate(360deg); }
+    linear-gradient(180deg, var(--bg) 0%, rgba(243, 243, 243, 0) 22%, rgba(243, 243, 243, 0) 78%, var(--bg) 100%);
 }
 
 .glass-card {
@@ -836,8 +841,7 @@ button, input { font: inherit; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .float__card,
-  .beads::before { animation: none; }
+  .float__card { animation: none; }
   .rotator__word { transition: none; }
 }
 

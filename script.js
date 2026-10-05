@@ -1,4 +1,4 @@
-// "Pay ___ from one wallet." — matches the Figma prototype:
+// "Pay ___ from one wallet." matches the Figma prototype:
 // each word holds for 0.8s, then slides in over 0.3s (ease-out).
 (function rotateWords() {
   const words = document.querySelectorAll(".rotator__word");
@@ -34,7 +34,7 @@
   });
 })();
 
-// Waitlist forms. There is no backend yet — hook the submission up here.
+// Waitlist forms. There is no backend yet; hook the submission up here.
 document.querySelectorAll("[data-waitlist]").forEach((form) => {
   form.addEventListener("submit", (event) => {
     event.preventDefault();
