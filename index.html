@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Wiremee | Money and more in one app</title>
+  <title>wiremee | Money and more in one app</title>
   <meta name="description" content="One wallet for deposits, transfers, bills and business payouts - built for individuals and business across Africa." />
   <link rel="icon" href="assets/img/logo.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=11" />
+  <link rel="stylesheet" href="styles.css?v=13" />
 </head>
 <body>
   <div class="page">
@@ -27,7 +27,7 @@
             <a href="#audience" data-audience-tab="tab-individuals">Personal</a>
             <a href="#audience" data-audience-tab="tab-businesses">Business</a>
             <a href="#audience" data-audience-tab="tab-businesses">Company</a>
-            <a href="#gen-z">GenZ</a>
+            <a href="#audience" data-audience-tab="tab-genz">GenZ</a>
           </div>
         </div>
         <a class="nav__cta btn-gradient" href="#waitlist">Join the waitlist</a>
@@ -46,14 +46,9 @@
         </div>
 
         <p class="hero__pay">
-          <span>Pay</span>
-          <span class="rotator" aria-live="polite">
-            <span class="rotator__word text-gradient is-active">anyone</span>
-            <span class="rotator__word text-gradient">your team</span>
-            <span class="rotator__word text-gradient">bills</span>
-            <span class="rotator__word text-gradient">friends</span>
-          </span>
-          <span>from one wallet.</span>
+          <b><span>Experience the future</span>
+          
+          <span>of banking and beyond</span></b>
         </p>
 
         <div class="hero__lead">
@@ -94,15 +89,15 @@
 
       <div class="features__inner">
         <div class="section-head">
-          <span class="badge glass"><img src="assets/img/emoji-bulb.png" alt="" width="18" height="18" />What To Expect</span>
-          <h2 class="h2">Everything Your Money Needs,<br /><span class="text-gradient">In One App</span></h2>
+          <span class="badge glass"><img src="assets/img/emoji-bulb.png" alt="" width="18" height="18" />What to expect</span>
+          <h2 class="h2">Get more in just<br /><span class="text-gradient">one app</span></h2>
         </div>
 
         <div class="feature-grid">
           <article class="feature-card">
             <img src="assets/img/icon-wallet.webp" alt="" width="100" height="100" />
             <h3>Multi-rail deposits</h3>
-            <p>Fund your wallet with Mobile Money, bank transfer,or crypto, whatever works for you.</p>
+            <p>Fund your wallet with mobile money, bank transfer,or crypto, whatever works for you.</p>
           </article>
           <article class="feature-card">
             <img src="assets/img/icon-transfer.webp" alt="" width="100" height="100" />
@@ -136,11 +131,12 @@
     <!-- ============ TARGET AUDIENCE ============ -->
     <section class="beads audience" id="audience">
       <div class="section-head">
-        <span class="badge glass"><img src="assets/img/emoji-target.png" alt="" width="18" height="18" />Target Audience</span>
-        <h2 class="h2">Built For Individuals,<br /><span class="text-gradient">And Businesses Alike</span></h2>
+        <span class="badge glass"><img src="assets/img/emoji-target.png" alt="" width="18" height="18" />Target audience</span>
+        <h2 class="h2">Intelligence engineered for</h2>
         <div class="toggle" role="tablist" aria-label="Audience">
-          <button class="toggle__btn is-active" type="button" role="tab" id="tab-individuals" aria-selected="true" aria-controls="panel-individuals">For Individuals</button>
-          <button class="toggle__btn" type="button" role="tab" id="tab-businesses" aria-selected="false" aria-controls="panel-businesses" tabindex="-1">For businesses</button>
+          <button class="toggle__btn is-active" type="button" role="tab" id="tab-individuals" aria-selected="true" aria-controls="panel-individuals">Personal</button>
+          <button class="toggle__btn" type="button" role="tab" id="tab-businesses" aria-selected="false" aria-controls="panel-businesses" tabindex="-1">Business</button>
+          <button class="toggle__btn" type="button" role="tab" id="tab-genz" aria-selected="false" aria-controls="panel-genz" tabindex="-1">Gen Z's</button>
         </div>
       </div>
 
@@ -207,24 +203,15 @@
           <p>Monitor balances and download payout reports anytime.</p>
         </article>
       </div>
-    </section>
-
-    <!-- ============ GENZ ============ -->
-    <section class="genz" id="gen-z">
-      <div class="section-head">
-        <span class="badge glass"><span aria-hidden="true">🎮</span>GenZ</span>
-        <h2 class="h2">Made For<br /><span class="text-gradient">GenZ</span></h2>
-      </div>
-
-      <div class="genz__cards">
+      <div class="audience__cards audience__cards--wrap" role="tabpanel" id="panel-genz" aria-labelledby="tab-genz" hidden>
         <article class="glass-card">
           <span class="badge badge--num glass">01</span>
-          <h3>Savings Account</h3>
+          <h3>Savings account</h3>
           <p>Put money aside and watch it grow toward your goals.</p>
         </article>
         <article class="glass-card">
           <span class="badge badge--num glass">02</span>
-          <h3>Investment Account</h3>
+          <h3>Investment account</h3>
           <p>Start investing early with small, simple amounts.</p>
         </article>
         <article class="glass-card">
@@ -234,12 +221,12 @@
         </article>
         <article class="glass-card">
           <span class="badge badge--num glass">04</span>
-          <h3>Watch a Movie</h3>
+          <h3>Watch a movie</h3>
           <p>Stream movies right inside the app.</p>
         </article>
         <article class="glass-card">
           <span class="badge badge--num glass">05</span>
-          <h3>Play Games</h3>
+          <h3>Play games</h3>
           <p>Play games and have fun without leaving Wiremee.</p>
         </article>
         <article class="glass-card">
@@ -258,8 +245,8 @@
     <!-- ============ HOW IT WORKS ============ -->
     <section class="how" id="how">
       <div class="section-head">
-        <span class="badge glass"><img src="assets/img/emoji-question.png" alt="" width="18" height="18" /><span class="badge__dark">How It Works</span></span>
-        <h2 class="h2">Up And Running<br /><span class="text-gradient">In Minutes</span></h2>
+        <span class="badge glass"><img src="assets/img/emoji-question.png" alt="" width="18" height="18" /><span class="badge__dark">How it works</span></span>
+        <h2 class="h2">Seamlessly<br /></span></h2>
       </div>
 
       <ol class="steps">
@@ -294,7 +281,7 @@
       </div>
 
       <section class="beads easy" id="easy">
-        <h2 class="h2">Built To Be <span class="text-gradient easy__accent">Easy</span></h2>
+        <h2 class="h2">Intelligence <span class="text-gradient easy__accent">engineered</span></h2>
         <div class="easy__cards">
           <article class="glass-card easy-card">
             <h3>@ama.k</h3>
@@ -315,8 +302,8 @@
       </section>
 
       <section class="cta" id="waitlist">
-        <h2 class="cta__title">Your Money’s About<br />To Move <span class="text-gradient">Faster</span></h2>
-        <p>Join the waitlist and be among the first to try Wiremee.</p>
+        <h2 class="cta__title">Speed and <span class="text-gradient">secured</span></h2>
+        <p>Join the waitlist to enjoy banking and beyond with wiremee.</p>
         <form class="waitlist glass" data-waitlist>
           <label class="sr-only" for="cta-email">Email address</label>
           <input id="cta-email" type="email" name="email" placeholder="Enter your email address" required />
@@ -332,14 +319,14 @@
             <a href="#easy">Security</a>
             <a href="#audience">Business</a>
           </nav>
-          <p class="footer__copy"><span>© 2026 Wiremee.</span><span class="footer__divider" aria-hidden="true"></span><span>All rights reserved.</span></p>
+          <p class="footer__copy"><span>© 2026 WIREMEE LTD.</span><span class="footer__divider" aria-hidden="true"></span><span>All rights reserved.</span></p>
         </div>
       </footer>
     </div>
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
-  <script src="script.js?v=11" defer></script>
-  <script src="beads3d.js?v=11" defer></script>
+  <script src="script.js?v=13" defer></script>
+  <script src="beads3d.js?v=13" defer></script>
 </body>
 </html>

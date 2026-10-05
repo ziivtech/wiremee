@@ -62,7 +62,7 @@ document.querySelectorAll("[data-waitlist]").forEach((form) => {
   });
 });
 
-// "For Individuals" / "For businesses" tabs
+// Personal / Business / Gen Z's tabs
 (function audienceTabs() {
   const tabs = Array.from(document.querySelectorAll(".toggle__btn"));
   if (!tabs.length) return;
@@ -88,7 +88,7 @@ document.querySelectorAll("[data-waitlist]").forEach((form) => {
   });
 })();
 
-// Nav "Personal" / "Business" links open the matching audience tab
+// Nav links (Personal, Business, Company, GenZ) open the matching audience tab
 document.querySelectorAll("[data-audience-tab]").forEach((link) =>
   link.addEventListener("click", () => document.getElementById(link.dataset.audienceTab)?.click())
 );
