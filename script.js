@@ -88,14 +88,14 @@ document.querySelectorAll("[data-waitlist]").forEach((form) => {
   });
 })();
 
-// Nav links (Personal, Business, Company, GenZ) open the matching audience tab
+// Nav links (Personal, Business, GenZ) open the matching audience tab
 document.querySelectorAll("[data-audience-tab]").forEach((link) =>
   link.addEventListener("click", () => document.getElementById(link.dataset.audienceTab)?.click())
 );
 
-// Parallax for the bead-spiral backgrounds
-(function beadParallax() {
-  const sections = document.querySelectorAll(".beads");
+// Parallax for the globe backgrounds
+(function globeParallax() {
+  const sections = document.querySelectorAll(".globe-bg");
   if (!sections.length) return;
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 

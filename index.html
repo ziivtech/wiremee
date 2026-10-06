@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=21" />
+  <link rel="stylesheet" href="styles.css?v=26" />
 </head>
 <body>
   <div class="page">
@@ -19,8 +19,6 @@
     <!-- ============ HERO ============ -->
     <header class="hero" id="top">
       <img class="hero__dots" src="assets/img/dots.svg" alt="" aria-hidden="true" />
-      <img class="deco deco--hero-right" src="assets/img/glossy-hero-right.webp" alt="" aria-hidden="true" />
-      <img class="deco deco--hero-left" src="assets/img/glossy-hero-left.webp" alt="" aria-hidden="true" />
 
       <nav class="nav glass" aria-label="Main">
         <div class="nav__left">
@@ -28,7 +26,6 @@
           <div class="nav__links" id="nav-links">
             <a href="#audience" data-audience-tab="tab-individuals">Personal</a>
             <a href="#audience" data-audience-tab="tab-businesses">Business</a>
-            <a href="#audience" data-audience-tab="tab-businesses">Company</a>
             <a href="#audience" data-audience-tab="tab-genz">GenZ</a>
           </div>
         </div>
@@ -82,7 +79,6 @@
 
     <!-- ============ FEATURES ============ -->
     <section class="features" id="features">
-      <img class="deco deco--features" src="assets/img/glossy-features.webp" alt="" aria-hidden="true" />
       <div class="frost" aria-hidden="true"></div>
 
       <div class="features__inner">
@@ -127,7 +123,7 @@
     </section>
 
     <!-- ============ TARGET AUDIENCE ============ -->
-    <section class="beads audience" id="audience">
+    <section class="globe-bg audience" id="audience">
       <div class="section-head">
         <span class="badge glass"><img src="assets/img/emoji-target.png" alt="" width="18" height="18" />Target audience</span>
         <h2 class="h2">Intelligence engineered for</h2>
@@ -188,21 +184,6 @@
         </article>
         <article class="glass-card">
           <span class="badge badge--num glass">05</span>
-          <h3>Swaps (currency, commodity, credit default)</h3>
-          <p>Exchange cash flows or liabilities from separate financial instruments.</p>
-        </article>
-        <article class="glass-card">
-          <span class="badge badge--num glass">06</span>
-          <h3>Discount house</h3>
-          <p>Buy or sell short-term debt instruments.</p>
-        </article>
-        <article class="glass-card">
-          <span class="badge badge--num glass">07</span>
-          <h3>Debt recovery</h3>
-          <p>Debt collection, debt management, risk monitoring and revenue collection.</p>
-        </article>
-        <article class="glass-card">
-          <span class="badge badge--num glass">08</span>
           <h3>Manage your books</h3>
           <ul class="card-list">
             <li>Customized bookkeeping solutions for businesses</li>
@@ -211,32 +192,32 @@
           </ul>
         </article>
         <article class="glass-card">
-          <span class="badge badge--num glass">09</span>
+          <span class="badge badge--num glass">06</span>
           <h3>Document approval</h3>
           <p>Structured document approval and tracking.</p>
         </article>
         <article class="glass-card">
-          <span class="badge badge--num glass">10</span>
+          <span class="badge badge--num glass">07</span>
           <h3>Automate customer quotes and invoices</h3>
           <p>Automate quotations, invoicing, and payment processing for customers with ease.</p>
         </article>
         <article class="glass-card">
-          <span class="badge badge--num glass">11</span>
+          <span class="badge badge--num glass">08</span>
           <h3>Bulk payment</h3>
           <p>Run bulk payments from CSV with validation checks.</p>
         </article>
         <article class="glass-card">
-          <span class="badge badge--num glass">12</span>
+          <span class="badge badge--num glass">09</span>
           <h3>Small loans</h3>
           <p>Short term loans for your business suppliers.</p>
         </article>
         <article class="glass-card">
-          <span class="badge badge--num glass">13</span>
+          <span class="badge badge--num glass">10</span>
           <h3>eGOV</h3>
           <p>Pay for government services, taxes and fees.</p>
         </article>
         <article class="glass-card">
-          <span class="badge badge--num glass">14</span>
+          <span class="badge badge--num glass">11</span>
           <h3>iRisk</h3>
           <p>Buy insurance, make claims, risk monitoring.</p>
         </article>
@@ -301,7 +282,7 @@
         <li class="step">
           <span class="step__num">03</span>
           <h3>Explore</h3>
-          <p>Mobile money, international transfers, cards, cryptocurrency, pay bills, cross-border interbank payments platform, multi-currency transactions, loans, supplier credit, investments, savings, swaps, discounting, debt recovery, iRisk, eGOV, and more.</p>
+          <p>Mobile money, international transfers, cards, cryptocurrency, pay bills, cross-border interbank payments platform, multi-currency transactions, loans, supplier credit, investments, savings, iRisk, eGOV, and more.</p>
         </li>
         <li class="step">
           <span class="step__num">04</span>
@@ -315,10 +296,9 @@
     <div class="end">
       <div class="end__bg" aria-hidden="true">
         <img class="end__dots" src="assets/img/dots.svg" alt="" />
-        <img class="deco deco--cta" src="assets/img/glossy-cta.webp" alt="" />
       </div>
 
-      <section class="beads easy" id="easy">
+      <section class="easy" id="easy">
         <h2 class="h2">Intelligence <span class="text-gradient easy__accent">engineered</span></h2>
         <div class="easy__cards">
           <article class="glass-card easy-card">
@@ -364,7 +344,8 @@
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
-  <script src="script.js?v=21" defer></script>
-  <script src="beads3d.js?v=21" defer></script>
+  <script src="script.js?v=26" defer></script>
+  <script src="globe-land.js?v=26" defer></script>
+  <script src="globe3d.js?v=26" defer></script>
 </body>
 </html>
