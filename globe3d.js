@@ -1,5 +1,6 @@
-// 3D globe behind the ".globe-bg" sections: a natural-looking Earth (NASA-based textures from the
-// three.js examples, in assets/img/earth) with drifting clouds and a soft atmosphere, turning slowly.
+// 3D "fintech" globe behind the ".globe-bg" sections: a natural-looking Earth (NASA-based textures
+// from the three.js examples, in assets/img/earth) with drifting clouds and a soft atmosphere, plus
+// money routes between financial hubs, pulsing city markers, currency symbols and a faint grid.
 // Without WebGL the sections simply keep their plain background.
 (function globe3d() {
   if (!window.THREE) return;
@@ -26,6 +27,68 @@
   const TILT = 0.32;             // rad, tips the north pole slightly towards the viewer
   const CLOUD_DRIFT = 0.012;     // rad/s the clouds move relative to the ground
   const TEX = "assets/img/earth/";
+  const SHOW_ROUTES = true;      // set false to hide the arcs and pulses
+
+  const GREEN = new THREE.Color(0x02c408);
+  const BLUE = new THREE.Color(0x17bef6);
+
+  // Financial hubs: [lat, lon, currency symbol]
+  const HUB = {
+    accra: [5.6, -0.2, "₵"], lagos: [6.5, 3.4, "₦"], nairobi: [-1.3, 36.8, ""], joburg: [-26.2, 28.0, ""],
+    london: [51.5, -0.1, "£"], frankfurt: [50.1, 8.7, "€"], newYork: [40.7, -74.0, "$"], dubai: [25.2, 55.3, ""],
+    mumbai: [19.1, 72.9, ""], singapore: [1.35, 103.8, "₿"], shanghai: [31.2, 121.5, "¥"],
+  };
+  const ROUTES = [
+    ["accra", "london"], ["lagos", "newYork"], ["nairobi", "dubai"], ["joburg", "shanghai"],
+    ["accra", "frankfurt"], ["lagos", "london"], ["nairobi", "mumbai"], ["joburg", "singapore"],
+    ["dubai", "london"], ["accra", "newYork"],
+  ];
+
+  // Lat/lon to a point matching the texture on three.js spheres (lon -180 at u = 0).
+  function toVec(lat, lon, r) {
+    const phi = ((lon + 180) * Math.PI) / 180;
+    const theta = ((90 - lat) * Math.PI) / 180;
+    return new THREE.Vector3(-r * Math.cos(phi) * Math.sin(theta), r * Math.cos(theta), r * Math.sin(phi) * Math.sin(theta));
+  }
+
+  // Great-circle arc lifted off the surface.
+  function arcPoints(a, b, steps) {
+    const va = toVec(a[0], a[1], 1);
+    const vb = toVec(b[0], b[1], 1);
+    const angle = va.angleTo(vb);
+    const lift = 0.05 + angle * 0.09;
+    const pts = [];
+    for (let i = 0; i <= steps; i++) {
+      const t = i / steps;
+      const v = va.clone().multiplyScalar(Math.sin((1 - t) * angle))
+        .add(vb.clone().multiplyScalar(Math.sin(t * angle)))
+        .divideScalar(Math.sin(angle));
+      pts.push(v.normalize().multiplyScalar(R * (1.01 + Math.sin(Math.PI * t) * lift)));
+    }
+    return pts;
+  }
+
+  // Round white chip with a gradient currency symbol, used as a sprite.
+  function currencyTexture(symbol) {
+    const c = document.createElement("canvas");
+    c.width = c.height = 128;
+    const g = c.getContext("2d");
+    g.fillStyle = "rgba(255,255,255,0.95)";
+    g.beginPath();
+    g.arc(64, 64, 58, 0, Math.PI * 2);
+    g.fill();
+    const grad = g.createLinearGradient(20, 0, 108, 0);
+    grad.addColorStop(0, "#02c408");
+    grad.addColorStop(1, "#17bef6");
+    g.fillStyle = grad;
+    g.font = "800 68px Manrope, system-ui, sans-serif";
+    g.textAlign = "center";
+    g.textBaseline = "middle";
+    g.fillText(symbol, 64, 68);
+    const t = new THREE.CanvasTexture(c);
+    t.encoding = THREE.sRGBEncoding;
+    return t;
+  }
 
   // Shared textures (loaded once for every section).
   const loader = new THREE.TextureLoader();
@@ -76,7 +139,66 @@
       })
     ));
 
-    return { scene, globe, cloudMesh };
+    // Faint latitude / longitude grid
+    const grid = [];
+    for (let lat = -60; lat <= 60; lat += 30) {
+      for (let lon = -180; lon < 180; lon += 4) grid.push(toVec(lat, lon, R * 1.012), toVec(lat, lon + 4, R * 1.012));
+    }
+    for (let lon = -180; lon < 180; lon += 30) {
+      for (let lat = -80; lat < 80; lat += 4) grid.push(toVec(lat, lon, R * 1.012), toVec(lat + 4, lon, R * 1.012));
+    }
+    globe.add(new THREE.LineSegments(
+      new THREE.BufferGeometry().setFromPoints(grid),
+      new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.22 })
+    ));
+
+    // City markers: a dot plus a ring that pulses outwards.
+    const rings = [];
+    const ringGeo = new THREE.RingGeometry(0.75, 1, 32);
+    Object.values(HUB).forEach(([lat, lon, symbol], i) => {
+      const pos = toVec(lat, lon, R * 1.012);
+      const normal = pos.clone().normalize();
+
+      const dot = new THREE.Mesh(new THREE.SphereGeometry(R * 0.012, 12, 8), new THREE.MeshBasicMaterial({ color: 0xffffff }));
+      dot.position.copy(pos);
+      globe.add(dot);
+
+      const ring = new THREE.Mesh(ringGeo, new THREE.MeshBasicMaterial({ color: BLUE, transparent: true, side: THREE.DoubleSide, depthWrite: false }));
+      ring.position.copy(pos);
+      ring.lookAt(pos.clone().add(normal));
+      globe.add(ring);
+      rings.push({ mesh: ring, offset: i * 0.37 });
+
+      if (symbol) {
+        const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: currencyTexture(symbol), transparent: true }));
+        sprite.position.copy(toVec(lat, lon, R * 1.16));
+        sprite.scale.setScalar(R * 0.11);
+        globe.add(sprite);
+      }
+    });
+
+    // Money routes: green→blue arcs with a pulse travelling along each.
+    const pulses = [];
+    if (SHOW_ROUTES) {
+      const pulseGeo = new THREE.SphereGeometry(R * 0.016, 12, 8);
+      ROUTES.forEach(([from, to], i) => {
+        const curve = new THREE.CatmullRomCurve3(arcPoints(HUB[from], HUB[to], 64));
+        const tube = new THREE.TubeGeometry(curve, 96, R * 0.004, 6, false);
+        const colors = [];
+        for (let v = 0; v < tube.attributes.position.count; v++) {
+          const c = GREEN.clone().lerp(BLUE, Math.floor(v / 7) / 96); // 7 vertices per ring along the tube
+          colors.push(c.r, c.g, c.b);
+        }
+        tube.setAttribute("color", new THREE.Float32BufferAttribute(colors, 3));
+        globe.add(new THREE.Mesh(tube, new THREE.MeshBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.9 })));
+
+        const pulse = new THREE.Mesh(pulseGeo, new THREE.MeshBasicMaterial({ color: 0xffffff }));
+        globe.add(pulse);
+        pulses.push({ curve, mesh: pulse, offset: i / ROUTES.length, speed: 0.1 + (i % 3) * 0.02 });
+      });
+    }
+
+    return { scene, globe, cloudMesh, rings, pulses };
   }
 
   function mount(section) {
@@ -127,10 +249,19 @@
 
   function draw(v, seconds) {
     if (!v.built) return;
-    const { globe, scene, cloudMesh } = v.built;
+    const { globe, scene, cloudMesh, rings, pulses } = v.built;
     // Texture longitude 0 faces +x on three.js spheres, so -90° turns FACE_LON towards the camera.
     globe.rotation.y = (-(FACE_LON + 90) * Math.PI) / 180 + seconds * SPIN_SPEED;
     if (cloudMesh) cloudMesh.rotation.y = seconds * CLOUD_DRIFT;
+    rings.forEach((r) => {
+      const t = (seconds * 0.6 + r.offset) % 1;
+      r.mesh.scale.setScalar(R * (0.015 + t * 0.05));
+      r.mesh.material.opacity = 1 - t;
+    });
+    pulses.forEach((p) => {
+      const t = (p.offset + seconds * p.speed) % 1;
+      p.mesh.position.copy(p.curve.getPointAt(t));
+    });
     v.renderer.render(scene, v.camera);
   }
 
