@@ -32,16 +32,21 @@
   const GREEN = new THREE.Color(0x02c408);
   const BLUE = new THREE.Color(0x17bef6);
 
-  // Financial hubs: [lat, lon, currency symbol]
+  // Financial hubs on every continent: [lat, lon, currency symbol]
   const HUB = {
-    accra: [5.6, -0.2, "₵"], lagos: [6.5, 3.4, "₦"], nairobi: [-1.3, 36.8, ""], joburg: [-26.2, 28.0, ""],
-    london: [51.5, -0.1, "£"], frankfurt: [50.1, 8.7, "€"], newYork: [40.7, -74.0, "$"], dubai: [25.2, 55.3, ""],
-    mumbai: [19.1, 72.9, ""], singapore: [1.35, 103.8, "₿"], shanghai: [31.2, 121.5, "¥"],
+    accra: [5.6, -0.2, "₵"], lagos: [6.5, 3.4, "₦"], nairobi: [-1.3, 36.8, ""], joburg: [-26.2, 28.0, ""], cairo: [30.0, 31.2, ""],
+    london: [51.5, -0.1, "£"], frankfurt: [50.1, 8.7, "€"], dubai: [25.2, 55.3, ""], mumbai: [19.1, 72.9, "₹"],
+    singapore: [1.35, 103.8, "₿"], shanghai: [31.2, 121.5, "¥"], tokyo: [35.7, 139.7, ""], sydney: [-33.9, 151.2, ""],
+    newYork: [40.7, -74.0, "$"], toronto: [43.7, -79.4, ""], sanFrancisco: [37.8, -122.4, ""], mexicoCity: [19.4, -99.1, ""],
+    saoPaulo: [-23.5, -46.6, ""], lima: [-12.0, -77.0, ""],
   };
+  // Africa-centred, but spread around the world so arcs show from every side as the globe turns.
   const ROUTES = [
-    ["accra", "london"], ["lagos", "newYork"], ["nairobi", "dubai"], ["joburg", "shanghai"],
-    ["accra", "frankfurt"], ["lagos", "london"], ["nairobi", "mumbai"], ["joburg", "singapore"],
-    ["dubai", "london"], ["accra", "newYork"],
+    ["accra", "london"], ["lagos", "newYork"], ["nairobi", "dubai"], ["joburg", "shanghai"], ["accra", "saoPaulo"],
+    ["cairo", "frankfurt"], ["lagos", "london"], ["nairobi", "mumbai"], ["joburg", "sydney"], ["dubai", "singapore"],
+    ["mumbai", "singapore"], ["singapore", "sydney"], ["shanghai", "tokyo"], ["tokyo", "sanFrancisco"], ["sydney", "sanFrancisco"],
+    ["sanFrancisco", "newYork"], ["toronto", "london"], ["newYork", "frankfurt"], ["mexicoCity", "saoPaulo"], ["lima", "mexicoCity"],
+    ["saoPaulo", "joburg"], ["tokyo", "mumbai"],
   ];
 
   // Lat/lon to a point matching the texture on three.js spheres (lon -180 at u = 0).
