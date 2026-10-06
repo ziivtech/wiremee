@@ -1,8 +1,8 @@
-// 3D globe behind the ".globe-bg" sections.
-// Continents are drawn as small white beads (positions from globe-land.js) and the globe turns slowly.
+// 3D globe behind the ".globe-bg" sections: a natural-looking Earth (NASA-based textures from the
+// three.js examples, in assets/img/earth) with drifting clouds and a soft atmosphere, turning slowly.
 // Without WebGL the sections simply keep their plain background.
 (function globe3d() {
-  if (!window.THREE || !window.WIREMEE_LAND) return;
+  if (!window.THREE) return;
 
   const sections = Array.from(document.querySelectorAll(".globe-bg"));
   if (!sections.length) return;
@@ -24,49 +24,59 @@
   const SPIN_SPEED = 0.045;      // rad/s, slow so it stays in the background
   const FACE_LON = 15;           // longitude facing the viewer at start (Africa)
   const TILT = 0.32;             // rad, tips the north pole slightly towards the viewer
+  const CLOUD_DRIFT = 0.012;     // rad/s the clouds move relative to the ground
+  const TEX = "assets/img/earth/";
 
+  // Shared textures (loaded once for every section).
+  const loader = new THREE.TextureLoader();
+  const loadTex = (file, srgb) => new Promise((resolve) => {
+    loader.load(TEX + file, (t) => {
+      if (srgb) t.encoding = THREE.sRGBEncoding;
+      t.anisotropy = 4;
+      resolve(t);
+    }, undefined, () => resolve(null));
+  });
+  const textures = Promise.all([loadTex("earth-day.webp", true), loadTex("earth-water.webp"), loadTex("earth-clouds.webp", true)]);
 
-  function toVec(lat, lon, r) {
-    const la = (lat * Math.PI) / 180;
-    const lo = (lon * Math.PI) / 180;
-    return new THREE.Vector3(r * Math.cos(la) * Math.sin(lo), r * Math.sin(la), r * Math.cos(la) * Math.cos(lo));
-  }
-
-
-  function buildScene(light) {
+  function buildScene(light, [day, water, clouds]) {
     const scene = new THREE.Scene();
-    scene.add(new THREE.HemisphereLight(0xffffff, 0x9a9a9a, 0.55));
-    const key = new THREE.DirectionalLight(0xffffff, 0.8);
-    key.position.set(-4, 5, 7);
-    scene.add(key);
+    scene.add(new THREE.AmbientLight(0xffffff, 0.45));
+    const sun = new THREE.DirectionalLight(0xffffff, 0.95);
+    sun.position.set(-4, 3, 6);
+    scene.add(sun);
 
     const globe = new THREE.Group();
     globe.rotation.x = TILT;
     scene.add(globe);
 
-    // Soft body so the globe reads as a sphere.
+    const segs = light ? [48, 32] : [96, 64];
     globe.add(new THREE.Mesh(
-      new THREE.SphereGeometry(R * 0.985, 64, 48),
-      new THREE.MeshStandardMaterial({ color: 0xe4e4e4, roughness: 1, metalness: 0 })
+      new THREE.SphereGeometry(R, segs[0], segs[1]),
+      new THREE.MeshPhongMaterial({ map: day, specularMap: water, specular: new THREE.Color(0x3a4a5a), shininess: 18 })
     ));
 
-    // Land beads
-    const land = window.WIREMEE_LAND;
-    const count = land.length / 2;
-    const beadGeo = new THREE.SphereGeometry(R * 0.0125, light ? 6 : 10, light ? 4 : 8);
-    const beads = new THREE.InstancedMesh(
-      beadGeo,
-      new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.65, metalness: 0 }),
-      count
-    );
-    const m4 = new THREE.Matrix4();
-    for (let i = 0; i < count; i++) {
-      const p = toVec(land[i * 2] / 10, land[i * 2 + 1] / 10, R);
-      beads.setMatrixAt(i, m4.makeTranslation(p.x, p.y, p.z));
+    let cloudMesh = null;
+    if (clouds) {
+      cloudMesh = new THREE.Mesh(
+        new THREE.SphereGeometry(R * 1.008, segs[0], segs[1]),
+        new THREE.MeshLambertMaterial({ map: clouds, transparent: true, opacity: 0.85, depthWrite: false })
+      );
+      globe.add(cloudMesh);
     }
-    globe.add(beads);
 
-    return { scene, globe };
+    // Soft blue atmosphere around the edge.
+    scene.add(new THREE.Mesh(
+      new THREE.SphereGeometry(R * 1.06, 64, 48),
+      new THREE.ShaderMaterial({
+        side: THREE.BackSide,
+        transparent: true,
+        depthWrite: false,
+        vertexShader: "varying vec3 vN; void main(){ vN = normalize(normalMatrix * normal); gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }",
+        fragmentShader: "varying vec3 vN; void main(){ float i = pow(0.72 - dot(vN, vec3(0.0, 0.0, 1.0)), 3.0); gl_FragColor = vec4(0.35, 0.65, 1.0, clamp(i, 0.0, 1.0)); }",
+      })
+    ));
+
+    return { scene, globe, cloudMesh };
   }
 
   function mount(section) {
@@ -88,8 +98,7 @@
 
     const camera = new THREE.PerspectiveCamera(FOV, 1, 0.1, 1000);
     const light = canvas.clientWidth < 700;
-    const built = buildScene(light);
-    const view = { section, renderer, camera, built, fps: light ? 30 : 60, lastDraw: 0, visible: false, resize };
+    const view = { section, renderer, camera, built: null, light, fps: light ? 30 : 60, lastDraw: 0, visible: false, resize };
 
     function resize() {
       const w = canvas.clientWidth;
@@ -99,7 +108,7 @@
       renderer.setSize(w, h, false);
       camera.aspect = w / h;
       // Globe radius in px: big on desktop, fits the width on phones.
-      const radiusPx = Math.min(sh * 0.4, w * 0.42, 380);
+      const radiusPx = (view.radiusPx = Math.min(sh * 0.4, w * 0.42, 380));
       const tanHalf = Math.tan((FOV * Math.PI) / 360);
       camera.position.set(0, 0, (R * h) / (2 * tanHalf * radiusPx));
       camera.lookAt(0, 0, 0);
@@ -108,23 +117,35 @@
       // Phones: sections are tall and full of cards, so lift the globe up behind the heading
       // (centre ~200px below the section top) instead of hiding it in the middle.
       const centerFromTop = w < 700 ? 80 + 200 : h / 2; // canvas starts 80px above the section
-      built.globe.position.y = ((h / 2 - centerFromTop) * R) / radiusPx;
+      view.globeY = ((h / 2 - centerFromTop) * R) / view.radiusPx;
+      if (view.built) view.built.globe.position.y = view.globeY;
     }
 
     resize();
-    draw(view, 0);
-    section.classList.add("globe-bg--3d");
     return view;
   }
 
   function draw(v, seconds) {
-    const { globe, scene } = v.built;
-    globe.rotation.y = (-FACE_LON * Math.PI) / 180 + seconds * SPIN_SPEED;
+    if (!v.built) return;
+    const { globe, scene, cloudMesh } = v.built;
+    // Texture longitude 0 faces +x on three.js spheres, so -90° turns FACE_LON towards the camera.
+    globe.rotation.y = (-(FACE_LON + 90) * Math.PI) / 180 + seconds * SPIN_SPEED;
+    if (cloudMesh) cloudMesh.rotation.y = seconds * CLOUD_DRIFT;
     v.renderer.render(scene, v.camera);
   }
 
   const views = sections.map(mount).filter(Boolean);
   if (!views.length) return;
+
+  textures.then((tex) => {
+    if (!tex[0]) return; // no Earth texture: keep the plain background
+    views.forEach((v) => {
+      v.built = buildScene(v.light, tex);
+      v.built.globe.position.y = v.globeY || 0;
+      draw(v, 0);
+      v.section.classList.add("globe-bg--3d");
+    });
+  });
 
   window.addEventListener("resize", () => views.forEach((v) => { v.resize(); draw(v, 0); }));
   if (reducedMotion) return; // keep the single still frame

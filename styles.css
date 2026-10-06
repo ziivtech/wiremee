@@ -503,7 +503,7 @@ button, input { font: inherit; }
   width: 100%;
   height: calc(100% + 160px);
   translate: 0 var(--parallax, 0px);
-  opacity: 0.2; /* very faint: a background watermark, not a focal point */
+  opacity: 0.35; /* soft background: natural colours still read, text stays on top */
   pointer-events: none;
 }
 .globe-bg::after {
