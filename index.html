@@ -3,13 +3,15 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Keep the light design even when the phone/browser is in dark mode (stops auto-darkening). -->
+  <meta name="color-scheme" content="only light" />
   <title>wiremee | Money and more in one app</title>
   <meta name="description" content="We are building an everything money and more app that allows individuals and businesses experience the future of banking and beyond. Join the waitlist and stay ahead." />
   <link rel="icon" href="assets/img/logo.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=16" />
+  <link rel="stylesheet" href="styles.css?v=18" />
 </head>
 <body>
   <div class="page">
@@ -136,26 +138,31 @@
         </div>
       </div>
 
-      <div class="audience__cards" role="tabpanel" id="panel-individuals" aria-labelledby="tab-individuals">
+      <div class="audience__cards audience__cards--wrap audience__cards--five-up" role="tabpanel" id="panel-individuals" aria-labelledby="tab-individuals">
         <article class="glass-card">
           <span class="badge badge--num glass">01</span>
-          <h3>Register in minutes</h3>
-          <p>Sign up with your phone number and verify with a one-time code.</p>
+          <h3>Mobile banking</h3>
+          <p>Bank from your phone: send, receive and pay bills anytime, anywhere.</p>
         </article>
         <article class="glass-card">
           <span class="badge badge--num glass">02</span>
-          <h3>Pay in any way</h3>
-          <p>Deposit and withdraw via Mobile money, bank ,card or crypto.</p>
+          <h3>Professional account</h3>
+          <p>A dedicated account for freelancers and professionals to get paid and manage earnings.</p>
         </article>
         <article class="glass-card">
           <span class="badge badge--num glass">03</span>
-          <h3>Send instantly</h3>
-          <p>Send by mobile phone number, username or QR code.</p>
+          <h3>Investments</h3>
+          <p>Grow your money with stocks and bonds, right from the app.</p>
         </article>
         <article class="glass-card">
           <span class="badge badge--num glass">04</span>
-          <h3>Register in minutes</h3>
-          <p>Track every transaction with clear, real-time status</p>
+          <h3>Cryptocurrency</h3>
+          <p>Buy, hold and send crypto from the same wallet.</p>
+        </article>
+        <article class="glass-card">
+          <span class="badge badge--num glass">05</span>
+          <h3>International transfers</h3>
+          <p>Send money abroad quickly, with clear fees and live tracking.</p>
         </article>
       </div>
       <div class="audience__cards audience__cards--wrap" role="tabpanel" id="panel-businesses" aria-labelledby="tab-businesses" hidden>
@@ -322,7 +329,7 @@
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
-  <script src="script.js?v=16" defer></script>
-  <script src="beads3d.js?v=16" defer></script>
+  <script src="script.js?v=18" defer></script>
+  <script src="beads3d.js?v=18" defer></script>
 </body>
 </html>

@@ -1,6 +1,7 @@
 /* Wiremee landing page, built from Figma frame 193:118 (1440px desktop). */
 
 :root {
+  color-scheme: only light;
   --green: #02c408;
   --blue: #17bef6;
   --gradient: linear-gradient(90deg, var(--green) 0%, var(--blue) 100%);
@@ -589,6 +590,8 @@ button, input { font: inherit; }
 /* Business tab has seven cards: wrap them 4 + 3, centred (like the GenZ section). */
 .audience__cards--wrap { display: flex; flex-wrap: wrap; justify-content: center; }
 .audience__cards--wrap .glass-card { flex: 0 1 calc((100% - 72px) / 4); }
+/* Personal tab has five cards: one row of five on desktop. */
+.audience__cards--five-up .glass-card { flex-basis: calc((100% - 96px) / 5); }
 .card-list {
   display: flex;
   flex-direction: column;
