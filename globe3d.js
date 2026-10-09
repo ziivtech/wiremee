@@ -132,8 +132,8 @@
       globe.add(cloudMesh);
     }
 
-    // Soft blue atmosphere around the edge.
-    scene.add(new THREE.Mesh(
+    // Soft blue atmosphere around the edge (attached to the globe so it moves with it).
+    globe.add(new THREE.Mesh(
       new THREE.SphereGeometry(R * 1.06, 64, 48),
       new THREE.ShaderMaterial({
         side: THREE.BackSide,
@@ -230,30 +230,33 @@
     function resize() {
       const w = canvas.clientWidth;
       const h = canvas.clientHeight;
-      const sh = section.clientHeight;
-      if (!w || !h || !sh) return;
+      if (!w || !h) return;
       renderer.setSize(w, h, false);
       camera.aspect = w / h;
-      // Globe radius in px: big on desktop, fits the width on phones.
-      const radiusPx = (view.radiusPx = Math.min(sh * 0.4, w * 0.42, 380));
+      // Globe radius in px: fixed (not based on section height) so it stays the same size whichever
+      // tab is open; big on desktop, fits the width on phones.
+      const radiusPx = (view.radiusPx = Math.min(w * 0.42, 320));
       const tanHalf = Math.tan((FOV * Math.PI) / 360);
       camera.position.set(0, 0, (R * h) / (2 * tanHalf * radiusPx));
       camera.lookAt(0, 0, 0);
       camera.updateProjectionMatrix();
 
-      // Phones: sections are tall and full of cards, so lift the globe up behind the heading
-      // (centre ~200px below the section top) instead of hiding it in the middle.
-      const centerFromTop = w < 700 ? 80 + 200 : h / 2; // canvas starts 80px above the section
+      // Keep the globe a fixed distance below the section top (not centred), so it doesn't move when
+      // a tab with more or fewer cards changes the section height. Phones lift it behind the heading.
+      const centerFromTop = 80 + (w < 700 ? 200 : 400); // canvas starts 80px above the section
       view.globeY = ((h / 2 - centerFromTop) * R) / view.radiusPx;
       if (view.built) view.built.globe.position.y = view.globeY;
     }
 
     resize();
+    // Switching tabs changes the section height: re-fit the canvas so the globe isn't stretched.
+    if ("ResizeObserver" in window) new ResizeObserver(() => { resize(); draw(view, view.lastSeconds || 0); }).observe(canvas);
     return view;
   }
 
   function draw(v, seconds) {
     if (!v.built) return;
+    v.lastSeconds = seconds;
     const { globe, scene, cloudMesh, rings, pulses } = v.built;
     // Texture longitude 0 faces +x on three.js spheres, so -90° turns FACE_LON towards the camera.
     globe.rotation.y = (-(FACE_LON + 90) * Math.PI) / 180 + seconds * SPIN_SPEED;
