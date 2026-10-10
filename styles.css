@@ -663,6 +663,7 @@ button, input { font: inherit; }
   position: relative;
   z-index: 1;
   margin-top: -9px;
+  overflow: hidden; /* the dotted background is taller than the footer; don't let it add empty page below */
 }
 
 .end__bg {
@@ -766,6 +767,18 @@ button, input { font: inherit; }
   letter-spacing: -0.2px;
 }
 .footer__divider { width: 1px; height: 22px; background: var(--ink-600); }
+.footer__credit {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  color: var(--ink-400);
+  font-size: 13px;
+  line-height: 18px;
+  letter-spacing: -0.1px;
+}
+.footer__credit img { width: 20px; height: 20px; }
+.footer__credit strong { color: var(--ink-600); font-weight: 700; }
 
 /* ---------- responsive ---------- */
 
