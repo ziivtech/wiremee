@@ -767,18 +767,33 @@ button, input { font: inherit; }
   letter-spacing: -0.2px;
 }
 .footer__divider { width: 1px; height: 22px; background: var(--ink-600); }
+/* Credit sits apart from the footer content, behind a thin divider. */
 .footer__credit {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  margin-top: 4px;
+  width: min(560px, 100%);
+  margin: 48px 0 0;
+  padding-top: 24px;
+  border-top: 1px solid #e2e2e2;
   color: var(--ink-400);
   font-size: 13px;
-  line-height: 18px;
+  line-height: 20px;
   letter-spacing: -0.1px;
+  text-align: center;
 }
-.footer__credit img { width: 20px; height: 20px; }
-.footer__credit strong { color: var(--ink-600); font-weight: 700; }
+.footer__credit-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink-600);
+  font-weight: 700;
+  transition: color 0.2s;
+}
+.footer__credit-brand:hover { color: #1f8a5a; }
+.footer__credit-brand img { width: 22px; height: 22px; }
 
 /* ---------- responsive ---------- */
 
